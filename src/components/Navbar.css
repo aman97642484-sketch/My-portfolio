@@ -1,0 +1,476 @@
+/* ---------- Shell: sticky glass bar ---------- */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: color-mix(in srgb, var(--color-bg) 55%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid var(--color-divider);
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Hairline orange accent that fades in once the page scrolls */
+.navbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent) 50%, transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.navbar.is-scrolled,
+.navbar.is-menu-open {
+  background-color: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+.navbar.is-scrolled::after {
+  opacity: 0.6;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px; /* matches the Hero grid so edges align */
+  height: 70px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ---------- Logo: monogram + stacked wordmark ---------- */
+
+.navbar__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.navbar__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+    transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Offset orange shadow-plate, echoing the Hero portrait frame */
+.navbar__mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 1px solid var(--color-accent);
+  border-radius: 2px;
+  transform: translate(4px, 4px);
+  transition: transform 0.3s ease;
+}
+
+.navbar__logo:hover .navbar__mark {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+  transform: translate(-2px, -2px);
+}
+
+.navbar__logo:hover .navbar__mark::before {
+  transform: translate(6px, 6px);
+}
+
+.navbar__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  line-height: 1;
+}
+
+.navbar__name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.navbar__name em {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+.navbar__tagline {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Links ---------- */
+
+.navbar__menu {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 2.4vw, 2.25rem);
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+/* Theme toggle + hamburger: stay in the bar at every width */
+.navbar__controls {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: 0.5rem;
+  margin-left: clamp(0.75rem, 1.6vw, 1.5rem);
+}
+
+.navbar__link {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 82%, transparent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar__num {
+  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  opacity: 0.55;
+  transform: translateY(-0.35em);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Underline that draws in from the left, like the Hero social links */
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.navbar__link:hover,
+.navbar__link.is-active {
+  color: var(--color-text);
+}
+
+.navbar__link:hover .navbar__num,
+.navbar__link.is-active .navbar__num {
+  opacity: 1;
+  transform: translateY(-0.55em);
+}
+
+.navbar__link:hover::after,
+.navbar__link.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- CTA: sharp, offset-shadow button (matches Hero buttons) ---------- */
+
+.navbar__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.25rem;
+  border: 2px solid var(--color-accent);
+  border-radius: 2px;
+  background-color: var(--color-accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-accent);
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.navbar__cta svg {
+  transition: transform 0.3s ease;
+}
+
+.navbar__cta:hover {
+  border-color: var(--color-accent-hover);
+  background-color: var(--color-accent-hover);
+  transform: translate(-3px, -3px);
+  box-shadow: 3px 3px 0 var(--color-text);
+}
+
+.navbar__cta:hover svg {
+  transform: translate(2px, -2px);
+}
+
+.navbar__cta:active {
+  border-color: var(--color-accent-active);
+  background-color: var(--color-accent-active);
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* ---------- Focus ---------- */
+
+.navbar__link:focus-visible,
+.navbar__cta:focus-visible,
+.navbar__logo:focus-visible,
+.navbar__toggle:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 4px;
+}
+
+.navbar__cta:focus-visible {
+  outline-color: var(--color-text);
+}
+
+/* ---------- Hamburger (hidden on desktop) ---------- */
+
+.navbar__toggle {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar__toggle span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 2px;
+  margin-left: -10px;
+  background-color: var(--color-text);
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.2s ease,
+    background-color 0.3s ease, width 0.3s ease;
+}
+
+.navbar__toggle span:nth-child(1) { transform: translateY(-6px); }
+.navbar__toggle span:nth-child(2) { transform: translateY(0); width: 14px; margin-left: -10px; }
+.navbar__toggle span:nth-child(3) { transform: translateY(6px); }
+
+.navbar__toggle:hover {
+  border-color: var(--color-accent);
+}
+
+.navbar__toggle:hover span {
+  background-color: var(--color-accent);
+}
+
+.navbar__toggle:hover span:nth-child(2) {
+  width: 20px;
+}
+
+.navbar__toggle.is-open {
+  border-color: var(--color-accent);
+}
+
+.navbar__toggle.is-open span:nth-child(1) { transform: rotate(45deg); }
+.navbar__toggle.is-open span:nth-child(2) { opacity: 0; transform: translateX(8px); }
+.navbar__toggle.is-open span:nth-child(3) { transform: rotate(-45deg); }
+
+/* ---------- Mid-width desktop: keep larger type from crowding ---------- */
+
+@media (min-width: 861px) and (max-width: 1279px) {
+  .navbar__num {
+    display: none;
+  }
+
+  .navbar__menu {
+    gap: 1.4rem;
+  }
+
+  .navbar__link {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1000px) {
+  .navbar__tagline {
+    display: none;
+  }
+
+  .navbar__menu {
+    gap: 1rem;
+  }
+
+  .navbar__link {
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+  }
+
+  .navbar__cta {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Narrowest desktop layout: the monogram alone carries the logo */
+@media (min-width: 861px) and (max-width: 960px) {
+  .navbar__brand {
+    display: none;
+  }
+}
+
+/* Smallest phones: make room for both controls beside the logo */
+@media (max-width: 380px) {
+  .navbar__inner {
+    padding: 0 1rem;
+  }
+
+  .navbar__logo {
+    gap: 0.65rem;
+  }
+
+  .navbar__name {
+    font-size: 1rem;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 860px) {
+  .navbar__toggle {
+    display: block;
+  }
+
+  .navbar__controls {
+    margin-left: auto;
+  }
+
+  .navbar__tagline {
+    display: none;
+  }
+
+  .navbar__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.5rem 1.5rem 1.75rem;
+    margin: 0;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+    box-shadow: var(--shadow-lg);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+      visibility 0s linear 0.35s;
+  }
+
+  .navbar__menu.is-open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+
+  /* Staggered reveal of each row */
+  .navbar__menu > li {
+    border-bottom: 1px solid var(--color-divider);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .navbar__menu.is-open > li {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--i, 0) * 45ms + 80ms);
+  }
+
+  .navbar__link {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.05rem 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+
+  .navbar__num {
+    font-size: 0.7rem;
+    transform: none;
+  }
+
+  .navbar__link:hover .navbar__num,
+  .navbar__link.is-active .navbar__num {
+    transform: none;
+  }
+
+  .navbar__link::after {
+    display: none;
+  }
+
+  .navbar__link.is-active .navbar__label {
+    color: var(--color-accent);
+  }
+
+  .navbar__link:hover .navbar__label {
+    padding-left: 0.4rem;
+  }
+
+  .navbar__label {
+    transition: padding-left 0.3s ease, color 0.3s ease;
+  }
+
+  .navbar__menu > li.navbar__cta-item {
+    margin-top: 1.5rem;
+    border-bottom: none;
+  }
+
+  .navbar__cta {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navbar *,
+  .navbar *::before,
+  .navbar *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

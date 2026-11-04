@@ -1,0 +1,489 @@
+.hero {
+  --glow-x: 70%;
+  --glow-y: 30%;
+  --glow-opacity: 0;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Portrait treatment: Dark Modern lifts it on soft shadow */
+  --hero-frame-shadow: var(--shadow-lg);
+  --hero-frame-shadow-hover: var(--shadow-lg);
+
+  position: relative;
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  padding: clamp(2rem, 4vh, 3.5rem) 0 clamp(4rem, 8vh, 5.5rem);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--color-bg);
+}
+
+/* Swiss Minimal: one flat accent plate is the only decoration */
+:root[data-theme='light'] .hero {
+  --hero-frame-shadow: 14px 14px 0 var(--color-accent);
+  --hero-frame-shadow-hover: 18px 18px 0 var(--color-accent);
+}
+
+:root[data-theme='light'] .hero__orb,
+:root[data-theme='light'] .hero__glow {
+  display: none;
+}
+
+/* ---------- Background layers ---------- */
+
+/* Four column rules that line up with the content grid */
+.hero__columns {
+  position: absolute;
+  inset: 0 max(1.5rem, calc((100% - 1280px) / 2 + 1.5rem));
+  z-index: -3;
+  border-right: 1px solid var(--color-grid-line);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-grid-line) 0 1px,
+    transparent 1px 25%
+  );
+}
+
+/* Ambient light behind the portrait (Dark Modern only) */
+.hero__orb {
+  position: absolute;
+  top: 8%;
+  right: -6%;
+  z-index: -2;
+  width: 44vw;
+  height: 44vw;
+  max-width: 620px;
+  max-height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 26%, transparent), transparent 68%);
+  filter: blur(40px);
+  opacity: var(--orb-opacity);
+  animation: hero-float 14s ease-in-out infinite alternate;
+}
+
+/* Mouse-following glow (Dark Modern only) */
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--glow-opacity);
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    420px circle at var(--glow-x) var(--glow-y),
+    color-mix(in srgb, var(--color-accent) 9%, transparent),
+    transparent 65%
+  );
+}
+
+/* ---------- Layout ---------- */
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2.5vw, 2rem);
+  row-gap: clamp(1.5rem, 3.5vh, 2.75rem);
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.hero__masthead {
+  grid-column: 1 / -1;
+}
+
+.hero__content {
+  grid-column: 1 / span 7;
+  align-self: start;
+}
+
+.hero__figure {
+  grid-column: 9 / -1;
+  align-self: start;
+}
+
+/* ---------- Masthead ---------- */
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 clamp(0.5rem, 1.5vh, 1rem);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  animation: hero-fade 0.7s ease both;
+}
+
+.hero__eyebrow-line {
+  width: 3rem;
+  height: 2px;
+  background: var(--color-accent);
+  transform-origin: left;
+  animation: hero-draw 0.8s 0.1s var(--ease-out) both;
+}
+
+/* Sized from the viewport so the name fills the grid on one line. The line is
+   about 6.8em wide in Segoe UI; dividing by 7 leaves headroom for wider system
+   fonts. The cap is what fits the 1280px container. */
+.hero__name {
+  margin: 0;
+  font-size: min(calc((100vw - 3rem) / 7), 11rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.hero__name-word {
+  display: inline-block;
+  animation: hero-rise 0.9s 0.1s var(--ease-out) both;
+}
+
+.hero__name-word--last {
+  animation-delay: 0.2s;
+}
+
+.hero__name b {
+  color: var(--color-accent);
+}
+
+/* ---------- Identity ---------- */
+
+.hero__identity {
+  margin: 0;
+  font-size: clamp(1.75rem, 4.2vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--color-accent);
+  animation: hero-rise 0.9s 0.3s var(--ease-out) both;
+}
+
+.hero__role {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2rem;
+  margin: 0.75rem 0 1rem;
+  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  color: var(--color-text);
+  animation: hero-fade 0.8s 0.45s ease both;
+}
+
+.hero__role-prefix {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.hero__caret {
+  width: 2px;
+  height: 1.3em;
+  background: var(--color-accent);
+  animation: hero-blink 1s steps(1) infinite;
+}
+
+.hero__intro {
+  max-width: 34rem;
+  margin: 0 0 clamp(1.25rem, 3vh, 2rem);
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  animation: hero-fade 0.8s 0.5s ease both;
+}
+
+/* ---------- Buttons ---------- */
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: clamp(1.25rem, 3vh, 2rem);
+  animation: hero-fade 0.8s 0.6s ease both;
+}
+
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.8rem;
+  border: 2px solid var(--color-accent);
+  border-radius: 2px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero__btn-arrow {
+  transition: transform 0.3s ease;
+}
+
+.hero__btn--primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.hero__btn--primary:hover {
+  border-color: var(--color-accent-hover);
+  background-color: var(--color-accent-hover);
+  transform: translate(-3px, -3px);
+  box-shadow: 3px 3px 0 var(--color-text);
+}
+
+.hero__btn--primary:hover .hero__btn-arrow {
+  transform: translateX(4px);
+}
+
+.hero__btn--primary:active {
+  border-color: var(--color-accent-active);
+  background-color: var(--color-accent-active);
+  transform: none;
+  box-shadow: none;
+}
+
+.hero__btn--ghost {
+  border-color: var(--color-border-strong);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.hero__btn--ghost:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.hero__btn:focus-visible,
+.hero__socials a:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 4px;
+}
+
+/* ---------- Socials ---------- */
+
+.hero__socials {
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: hero-fade 0.8s 0.7s ease both;
+}
+
+.hero__socials a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding-bottom: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  background: linear-gradient(var(--color-accent), var(--color-accent)) left bottom / 0 2px no-repeat;
+  transition: color 0.3s ease, background-size 0.3s ease;
+}
+
+.hero__socials svg {
+  transition: transform 0.3s ease;
+}
+
+.hero__socials a:hover {
+  color: var(--color-accent);
+  background-size: 100% 2px;
+}
+
+.hero__socials a:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ---------- Portrait ---------- */
+
+.hero__figure {
+  margin: 0;
+  animation: hero-fade 0.9s 0.35s ease both;
+}
+
+.hero__frame {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: var(--color-surface);
+  box-shadow: var(--hero-frame-shadow);
+  transition: box-shadow 0.4s var(--ease-out);
+  animation: hero-unveil 1.1s 0.35s var(--ease-out) both;
+}
+
+.hero__figure:hover .hero__frame {
+  box-shadow: var(--hero-frame-shadow-hover);
+}
+
+.hero__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  transition: transform 0.8s var(--ease-out);
+}
+
+.hero__figure:hover .hero__frame img {
+  transform: scale(1.03);
+}
+
+.hero__caption {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.hero__caption-index {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* ---------- Scroll cue ---------- */
+
+.hero__scroll {
+  position: absolute;
+  left: max(1.5rem, calc((100% - 1280px) / 2 + 1.5rem));
+  bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  animation: hero-fade 0.8s 0.9s ease both;
+}
+
+.hero__scroll i {
+  width: 3rem;
+  height: 1px;
+  background: var(--color-accent);
+  transform-origin: left;
+  animation: hero-line 2.4s ease-in-out infinite;
+}
+
+/* ---------- Animations ---------- */
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(24px); }
+}
+
+@keyframes hero-fade {
+  from { opacity: 0; }
+}
+
+@keyframes hero-draw {
+  from { transform: scaleX(0); }
+}
+
+@keyframes hero-unveil {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 -40px -40px 0); }
+}
+
+@keyframes hero-float {
+  to { transform: translate(-24px, 28px) scale(1.05); }
+}
+
+@keyframes hero-blink {
+  50% { opacity: 0; }
+}
+
+@keyframes hero-line {
+  0%, 100% { transform: scaleX(0.25); }
+  50% { transform: scaleX(1); }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+  .hero {
+    align-items: flex-start;
+  }
+
+  .hero__content {
+    grid-column: 1 / -1;
+  }
+
+  /* Portrait drops below the copy, pushed right to keep the asymmetry */
+  .hero__figure {
+    grid-column: 5 / -1;
+    margin-top: 1.5rem;
+    margin-right: 14px;
+  }
+
+  .hero__columns,
+  .hero__scroll {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  /* The name stacks and gets far larger than one line would allow */
+  .hero__name {
+    font-size: calc((100vw - 3rem) / 3.8);
+  }
+
+  .hero__name-word {
+    display: block;
+  }
+
+  .hero__figure {
+    grid-column: 3 / -1;
+  }
+
+  .hero__caption {
+    grid-template-columns: auto 1fr;
+  }
+
+  .hero__caption span:last-child {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero__btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero *,
+  .hero *::before,
+  .hero *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hero__figure:hover .hero__frame img {
+    transform: none;
+  }
+}
+
+/* Touch devices have no cursor, so the glow stays off */
+@media (hover: none) {
+  .hero__glow {
+    display: none;
+  }
+}

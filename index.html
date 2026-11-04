@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>portfolio</title>
+    <script>
+      // Runs before first paint so a light-theme visitor never sees a dark flash.
+      // Keep the storage key in sync with src/hooks/useTheme.js.
+      (function () {
+        var theme = null
+        try {
+          theme = localStorage.getItem('portfolio-theme')
+        } catch (e) {
+          // Storage unavailable: fall through to the system preference.
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        }
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

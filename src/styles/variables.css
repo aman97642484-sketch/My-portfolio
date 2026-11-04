@@ -1,0 +1,96 @@
+/*
+ * Design tokens. Components use these role-based names only, never raw colors.
+ * Dark Modern is the default; Swiss Minimal applies under [data-theme='light'].
+ * The attribute is set before first paint by the inline script in index.html
+ * and updated afterwards by src/hooks/useTheme.js.
+ */
+
+:root {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --container-width: 1100px;
+  --theme-transition-duration: 0.3s;
+}
+
+/* ---------- Dark Modern ---------- */
+
+:root {
+  color-scheme: dark;
+
+  /* Backgrounds and surfaces */
+  --color-bg: #0b0d10;
+  --color-bg-deep: #07080a; /* far end of section background gradients */
+  --color-surface: #15191f;
+
+  /* Text */
+  --color-text: #f5f5f0;
+  --color-text-secondary: #9ca3af;
+
+  /* Accent */
+  --color-accent: #c6f26a;
+  --color-on-accent: #0b0d10; /* text and icons placed on the accent */
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  --color-accent-highlight: color-mix(in srgb, var(--color-accent) 35%, transparent);
+
+  /* Borders and dividers */
+  --color-divider: color-mix(in srgb, var(--color-text) 10%, transparent);
+  --color-border: color-mix(in srgb, var(--color-text) 22%, transparent);
+  --color-border-strong: color-mix(in srgb, var(--color-text) 50%, transparent);
+  --color-grid-line: color-mix(in srgb, var(--color-text) 5%, transparent);
+
+  /* Interactive states */
+  --color-accent-hover: #d4f788;
+  --color-accent-active: #b2e04f;
+  --color-hover-bg: color-mix(in srgb, var(--color-text) 7%, transparent);
+  --color-focus-ring: var(--color-accent);
+  --color-selection-bg: var(--color-accent);
+  --color-selection-text: var(--color-on-accent);
+
+  /* Shadows and glows */
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 12px 32px -16px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 30px 60px -20px rgb(0 0 0 / 0.65);
+  --text-glow: 0 0 40px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  --orb-opacity: 0.6;
+}
+
+/* ---------- Swiss Minimal ---------- */
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Backgrounds and surfaces */
+  --color-bg: #f5f3ee;
+  --color-bg-deep: #ece9e2;
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-text: #171717;
+  --color-text-secondary: #666666;
+
+  /* Accent */
+  --color-accent: #3157ff;
+  --color-on-accent: #ffffff;
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  --color-accent-highlight: color-mix(in srgb, var(--color-accent) 24%, transparent);
+
+  /* Borders and dividers */
+  --color-divider: color-mix(in srgb, var(--color-text) 10%, transparent);
+  --color-border: color-mix(in srgb, var(--color-text) 20%, transparent);
+  --color-border-strong: color-mix(in srgb, var(--color-text) 55%, transparent);
+  --color-grid-line: color-mix(in srgb, var(--color-text) 5%, transparent);
+
+  /* Interactive states */
+  --color-accent-hover: #2547e0;
+  --color-accent-active: #1c38b8;
+  --color-hover-bg: color-mix(in srgb, var(--color-text) 5%, transparent);
+  --color-focus-ring: var(--color-accent);
+  --color-selection-bg: var(--color-accent);
+  --color-selection-text: var(--color-on-accent);
+
+  /* Shadows and glows */
+  --shadow-sm: 0 1px 4px rgb(23 23 23 / 0.08);
+  --shadow-md: 0 12px 28px -18px rgb(23 23 23 / 0.22);
+  --shadow-lg: 0 30px 60px -28px rgb(23 23 23 / 0.28);
+  --text-glow: none;
+  --orb-opacity: 0.35;
+}
